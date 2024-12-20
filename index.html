@@ -1,120 +1,274 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>運勢抽籤系統</title>
-  <script src="https://cdn.jsdelivr.net/npm/lucide-icons@0.216.0/dist/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css"></script>
-  <style>
-    .bg-pattern {
-      background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運勢抽籤系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: all 0.5s;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 35rem; /* 增加容器大小 */
+            transform: scale(1.05); /* 放大整體界面 */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 1.8rem; /* 增大標題字體 */
+            font-weight: bold;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            background: #f3f4f6;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .draw-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            background: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .draw-btn.active {
+            background: #f59e0b;
+            color: white;
+            cursor: pointer;
+        }
+
+        .draw-btn.active:hover {
+            background: #d97706;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+        }
+
+        .result.visible {
+            display: block;
+        }
+
+        .result p {
+            font-size: 1.2rem; /* 增大結果字體 */
+            font-weight: 600;
+        }
+
+        .love-selected {
+            background: linear-gradient(to right, #fce7f3, #fecdd3) !important;
+            color: #1f2937 !important;
+        }
+
+        .study-selected {
+            background: linear-gradient(to right, #bfdbfe, #a5f3fc) !important;
+            color: #1f2937 !important;
+        }
+
+        .wealth-selected {
+            background: linear-gradient(to right, #bbf7d0, #ecfccb) !important;
+            color: #1f2937 !important;
+        }
+
+        .love-bg {
+            background: radial-gradient(circle at center, #fce7f3, #fecdd3);
+        }
+
+        .study-bg {
+            background: radial-gradient(circle at center, #bfdbfe, #a5f3fc);
+        }
+
+        .wealth-bg {
+            background: radial-gradient(circle at center, #bbf7d0, #ecfccb);
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
+                運勢抽籤系統
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
+            </h1>
+        </div>
 
-  <div id="app" class="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-6 w-full max-w-md">
-    <div class="text-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-800 flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-yellow-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 2l4 4 4-4m0 12l-4-4-4 4m8-7H7m9 4H8"></path>
-        </svg> 
-        運勢抽籤系統 
-        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 text-yellow-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 2l4 4 4-4m0 12l-4-4-4 4m8-7H7m9 4H8"></path>
-        </svg>
-      </h1>
+        <div class="buttons-container">
+            <button class="category-btn" data-category="love" onclick="selectCategory('love')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+                愛情
+            </button>
+            <button class="category-btn" data-category="study" onclick="selectCategory('study')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                </svg>
+                學業
+            </button>
+            <button class="category-btn" data-category="wealth" onclick="selectCategory('wealth')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="14" x="2" y="5" rx="2"/>
+                    <line x1="2" x2="22" y1="10" y2="10"/>
+                </svg>
+                財運
+            </button>
+        </div>
+
+        <button id="drawButton" class="draw-btn" disabled onclick="drawFortune()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            抽籤
+        </button>
+
+        <div id="fortuneResult" class="result">
+            <p id="fortuneText"></p>
+        </div>
     </div>
 
-    <div id="category-buttons" class="flex justify-between space-x-2 mb-6">
-      <button class="category-button w-full p-3 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200" onclick="handleCategorySelect('love')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-2 text-pink-600" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 21c4-4 8-6 8-10a8 8 0 0 0-8-8c-2.5 0-4 2-4 2s-1.5-2-4-2a8 8 0 0 0-8 8c0 4 4 6 8 10s8-6 8-10z"></path>
-        </svg>
-        愛情
-      </button>
+    <script>
+        const fortuneMessages = {
+            love: [
+                { text: "今天將遇到心儀的對象，保持開放和自信的心態。", color: "text-pink-600" },
+                { text: "感情運勢大好，與伴侶之間的默契更加深厚。", color: "text-rose-500" },
+                { text: "有機會修復曾經的情感裂痕，釋懷很重要。", color: "text-red-400" },
+                { text: "愛情運勢穩定，相互理解和尊重是關鍵。", color: "text-pink-500" },
+                { text: "可能會收到一份意外的浪漫驚喜。", color: "text-red-600" },
+                { text: "感情上有新的突破，保持耐心和誠意。", color: "text-rose-700" },
+                { text: "與另一半的感情將進入更親密的階段。", color: "text-pink-700" }
+            ],
+            study: [
+                { text: "學習靈感源源不絕，今天是充滿效率的一天。", color: "text-blue-600" },
+                { text: "對於困難的課題，你今天會有意想不到的breakthrough。", color: "text-indigo-500" },
+                { text: "建議嘗試新的學習方法，效果可能會很驚人。", color: "text-cyan-600" },
+                { text: "與同學或老師的交流將帶來豐富的收穫。", color: "text-blue-500" },
+                { text: "集中精力，你的努力將很快看到成果。", color: "text-teal-600" },
+                { text: "今天是吸收新知識的絕佳時機。", color: "text-sky-700" },
+                { text: "學習的動力和專注力達到新高峰。", color: "text-blue-700" }
+            ],
+            wealth: [
+                { text: "財運有所提升，但仍需審慎理財。", color: "text-green-600" },
+                { text: "可能會有意外之財的機會，保持警覺。", color: "text-emerald-500" },
+                { text: "投資方面宜保守，避免激進決策。", color: "text-lime-600" },
+                { text: "今天適合與夥伴討論財務計劃。", color: "text-green-500" },
+                { text: "小心理財，機會正在悄悄靠近。", color: "text-yellow-600" },
+                { text: "財務狀況將逐漸改善，保持樂觀。", color: "text-green-700" },
+                { text: "有機會獲得額外收入或獎勳。", color: "text-emerald-600" }
+            ]
+        };
 
-      <button class="category-button w-full p-3 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200" onclick="handleCategorySelect('study')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-2 text-blue-600" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 3H7c-1.1 0-1.99.9-1.99 2L5 17c0 1.1.9 2 1.99 2h14c1.1 0 1.99-.9 1.99-2V5c0-1.1-.9-2-1.99-2zM17 18H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V8h10v2z"></path>
-        </svg>
-        學業
-      </button>
+        let selectedCategory = null;
 
-      <button class="category-button w-full p-3 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200" onclick="handleCategorySelect('wealth')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-2 text-green-600" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2l4 4-4 4m0-8v12m0 0l4 4-4 4"></path>
-        </svg>
-        財運
-      </button>
-    </div>
+        function selectCategory(category) {
+            selectedCategory = category;
+            
+            // Reset all category button styles
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.className = 'category-btn';
+            });
+            
+            // Set selected category button style
+            const selectedBtn = document.querySelector(`[data-category="${category}"]`);
+            selectedBtn.classList.add(`${category}-selected`);
+            
+            // Update background
+            document.body.className = `${category}-bg`;
+            
+            // Enable draw button
+            const drawButton = document.getElementById('drawButton');
+            drawButton.className = 'draw-btn active';
+            drawButton.disabled = false;
 
-    <button id="draw-fortune" class="w-full p-3 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed" onclick="drawFortune()" disabled>
-      <svg xmlns="http://www.w3.org/2000/svg" class="inline-block mr-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2l4 4-4 4m0-8v12m0 0l4 4-4 4"></path>
-      </svg>
-      抽籤
-    </button>
+            // Hide result initially
+            const resultDiv = document.getElementById('fortuneResult');
+            resultDiv.style.display = 'none';
+        }
 
-    <div id="fortune-message" class="mt-6 p-5 bg-white rounded-xl shadow-md text-center hidden">
-      <p id="fortune-text" class="text-lg font-semibold text-gray-600"></p>
-    </div>
-  </div>
+        function drawFortune() {
+            if (!selectedCategory) return;
 
-  <script>
-    const fortuneMessages = {
-      love: [
-        { text: "今天將遇到心儀的對象，保持開放和自信的心態。", color: "text-pink-600" },
-        { text: "感情運勢大好，與伴侶之間的默契更加深厚。", color: "text-rose-500" },
-        { text: "有機會修復曾經的情感裂痕，釋懷很重要。", color: "text-red-400" },
-        { text: "愛情運勢穩定，相互理解和尊重是關鍵。", color: "text-pink-500" },
-        { text: "可能會收到一份意外的浪漫驚喜。", color: "text-red-600" },
-        { text: "感情上有新的突破，保持耐心和誠意。", color: "text-rose-700" },
-        { text: "與另一半的感情將進入更親密的階段。", color: "text-pink-700" }
-      ],
-      study: [
-        { text: "學習靈感源源不絕，今天是充滿效率的一天。", color: "text-blue-600" },
-        { text: "對於困難的課題，你今天會有意想不到的突破。", color: "text-indigo-500" },
-        { text: "建議嘗試新的學習方法，效果可能會很驚人。", color: "text-cyan-600" },
-        { text: "與同學或老師的交流將帶來豐富的收穫。", color: "text-blue-500" },
-        { text: "集中精力，你的努力將很快看到成果。", color: "text-teal-600" },
-        { text: "今天是吸收新知識的絕佳時機。", color: "text-sky-700" },
-        { text: "學習的動力和專注力達到新高峰。", color: "text-blue-700" }
-      ],
-      wealth: [
-        { text: "財運有所提升，但仍需審慎理財。", color: "text-green-600" },
-        { text: "可能會有意外之財的機會，保持警覺。", color: "text-emerald-500" },
-        { text: "投資方面宜保守，避免激進決策。", color: "text-lime-600" },
-        { text: "今天適合與夥伴討論財務計劃。", color: "text-green-500" },
-        { text: "小心理財，機會正在悄悄靠近。", color: "text-yellow-600" },
-        { text: "財務狀況將逐漸改善，保持樂觀。", color: "text-green-700" },
-        { text: "有機會獲得額外收入或獎勳。", color: "text-emerald-600" }
-      ]
-    };
-
-    let selectedCategory = null;
-
-    function handleCategorySelect(category) {
-      selectedCategory = category;
-      document.getElementById('fortune-message').classList.add('hidden');
-      document.getElementById('draw-fortune').disabled = false;
-      document.getElementById('app').className = `min-h-screen flex items-center justify-center p-4 bg-pattern ${category === 'love' ? 'from-pink-200 to-red-200' : category === 'study' ? 'from-blue-200 to-cyan-200' : 'from-green-200 to-lime-200'}`;
-    }
-
-    function drawFortune() {
-      if (!selectedCategory) return;
-
-      const messages = fortuneMessages[selectedCategory];
-      const randomIndex = Math.floor(Math.random() * messages.length);
-      const fortune = messages[randomIndex];
-      
-      const fortuneText = document.getElementById('fortune-text');
-      fortuneText.textContent = fortune.text;
-      fortuneText.className = `text-lg font-semibold ${fortune.color}`;
-
-      document.getElementById('fortune-message').classList.remove('hidden');
-    }
-  </script>
+            const messages = fortuneMessages[selectedCategory];
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            const fortune = messages[randomIndex];
+            
+            const fortuneResult = document.getElementById('fortuneResult');
+            const fortuneText = document.getElementById('fortuneText');
+            
+            // Set fortune message
+            fortuneText.textContent = fortune.text;
+            fortuneText.className = fortune.color;
+            
+            // Show result
+            fortuneResult.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
